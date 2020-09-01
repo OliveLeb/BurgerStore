@@ -1,25 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import Navigation from './components/commun/Navigation';
+import Home from './components/Home';
+import Menus from './components/Menus';
+import Burgers from './components/Burgers';
+import Boissons from './components/Boissons';
+import Snacks from './components/Snacks';
+import Salades from './components/Salades';
+import Desserts from './components/Desserts';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navigation />
+      <Switch>
+        <Route path='/' exact>
+          <Home />
+        </Route>
+        <Route path='/menus'>
+          <Menus />
+        </Route>
+        <Route path='/burgers'>
+          <Burgers />
+        </Route>
+        <Route path='/boissons'>
+          <Boissons />
+        </Route>
+        <Route path='/snacks'>
+          <Snacks />
+        </Route>
+        <Route path='/salades'>
+          <Salades />
+        </Route>
+        <Route path='/desserts'>
+          <Desserts />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
