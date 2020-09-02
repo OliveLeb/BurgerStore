@@ -16,7 +16,7 @@ function App() {
       <Navigation />
       <Switch>
         <Route path='/' exact>
-          <Home />
+          <Menus />
         </Route>
         <Route path='/menus'>
           <Menus />

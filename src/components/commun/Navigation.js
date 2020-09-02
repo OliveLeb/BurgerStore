@@ -5,20 +5,20 @@ import { GiKnifeFork } from 'react-icons/gi';
 const Navigation = () => {
   return (
     <div style={{ textAlign: 'center' }}>
-      <div className='container site'>
-        <NavLink to='/'>
-          <h1 className='text-logo'>
+      <NavLink to='/'>
+        <h1 className='text-logo'>
+          <span>
+            {' '}
             <GiKnifeFork />
-            Burger Store
+          </span>
+          Burger Store
+          <span>
             <GiKnifeFork />
-          </h1>
-        </NavLink>
-      </div>
+          </span>
+        </h1>
+      </NavLink>
 
-      <nav
-        className='nav'
-        style={{ marginBottom: '30px', justifyContent: 'center' }}
-      >
+      <nav className='nav nav-pills'>
         <NavLink to='/menus' className='nav-link'>
           Menus
         </NavLink>
