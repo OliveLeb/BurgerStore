@@ -10,7 +10,8 @@ body {
   background-image: url('../src/images/bg.png');
 }
 
-.site {
+.site,
+.title {
   font-family: 'Holtwood One SC', sans-serif;
 }
 

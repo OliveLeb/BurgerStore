@@ -22,7 +22,8 @@ else{
 }
 
 // REQUETE PAR ID OU TABLE ENTIERE
-$sql = is_numeric($post_id) ? 'SELECT * FROM `items` WHERE id ='.$post_id : 'SELECT * FROM `items`';
+//$sql = is_numeric($post_id) ? 'SELECT * FROM `items` WHERE id ='.$post_id : 'SELECT * FROM `items`';
+$sql = 'SELECT i.id,i.name,i.description,i.price,i.image,categories.name as category FROM items as i LEFT JOIN categories ON i.category = categories.id ORDER BY i.id DESC';
 $stmt = $connect->prepare($sql);
 $stmt->execute();
 
@@ -34,11 +35,11 @@ if($stmt->rowCount() > 0) // VERIFIER SI ARTICLES PRESENTS
     {
         $post_data= [
             'id' => $row['id'],
-            'name' => $row['name'],
-            'description' => $row['description'],
-            'price' => $row['price'],
-            'image' => $row['image'],
-            'category' => $row['category']
+            'name' => html_entity_decode($row['name']),
+            'description' => html_entity_decode($row['description']),
+            'price' => html_entity_decode($row['price']),
+            'image' => html_entity_decode($row['image']),
+            'category' => html_entity_decode($row['category'])
         ];
         array_push($posts_array, $post_data);
     };

@@ -4,7 +4,7 @@ import { GiKnifeFork } from 'react-icons/gi';
 
 const Navigation = () => {
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div className='title' style={{ textAlign: 'center' }}>
       <NavLink to='/'>
         <h1 className='text-logo'>
           <span>

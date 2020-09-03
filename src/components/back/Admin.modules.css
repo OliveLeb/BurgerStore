@@ -1,4 +1,6 @@
 .admin {
   background: #fff;
   font-family: 'Lato', sans-serif;
+  border-radius: 5px;
+  padding: 10px;
 }
