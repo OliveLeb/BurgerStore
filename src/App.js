@@ -9,6 +9,7 @@ import Boissons from './components/Boissons';
 import Snacks from './components/Snacks';
 import Salades from './components/Salades';
 import Desserts from './components/Desserts';
+import Admin from './components/back/Admin';
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
         </Route>
         <Route path='/desserts'>
           <Desserts />
+        </Route>
+        <Route path='/admin'>
+          <Admin />
         </Route>
       </Switch>
     </Router>
