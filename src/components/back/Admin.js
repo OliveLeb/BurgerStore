@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { GoPlus } from 'react-icons/go';
 import { FaEye, FaPencilAlt } from 'react-icons/fa';
 import { ImCross } from 'react-icons/im';
-import Actions from '../../actions/actions';
+import Actions from '../../actions/actionsArticles';
 
 const Admin = () => {
   const [articles] = Actions();
@@ -15,7 +15,7 @@ const Admin = () => {
         <h1>
           <strong>Liste des produits </strong>
 
-          <NavLink to='*' className='btn btn-success'>
+          <NavLink to='/admin/ajouter' className='btn btn-success'>
             <GoPlus /> Ajouter
           </NavLink>
         </h1>

@@ -11,19 +11,7 @@ $db_connection = new Database();
 $connect = $db_connection->connect();
 
 
-if(isset($_GET['id']))
-{
-    $post_id = filter_var($_GET['id'], FILTER_VALIDATE_INT,[
-        'options' => ['default'=>'all_posts','min_range'=>1]
-    ]);
-}
-else{
-    $post_id = 'all_posts';
-}
-
-// REQUETE PAR ID OU TABLE ENTIERE
-//$sql = is_numeric($post_id) ? 'SELECT * FROM `items` WHERE id ='.$post_id : 'SELECT * FROM `items`';
-$sql = 'SELECT i.id,i.name,i.description,i.price,i.image,categories.name as category FROM items as i LEFT JOIN categories ON i.category = categories.id ORDER BY i.id DESC';
+$sql = 'SELECT * FROM categories';
 $stmt = $connect->prepare($sql);
 $stmt->execute();
 
@@ -35,11 +23,7 @@ if($stmt->rowCount() > 0) // VERIFIER SI ARTICLES PRESENTS
     {
         $post_data= [
             'id' => $row['id'],
-            'name' => html_entity_decode($row['name']),
-            'description' => html_entity_decode($row['description']),
-            'price' => html_entity_decode($row['price']),
-            'image' => html_entity_decode($row['image']),
-            'category' => html_entity_decode($row['category'])
+            'name' => html_entity_decode($row['name'])
         ];
         array_push($posts_array, $post_data);
     };

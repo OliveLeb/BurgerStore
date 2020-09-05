@@ -9,7 +9,7 @@ import Snacks from './components/Snacks';
 import Salades from './components/Salades';
 import Desserts from './components/Desserts';
 import Admin from './components/back/Admin';
-import Actions from './actions/actions';
+import AjouterArticle from './components/back/AjouterArticle';
 
 function App() {
   return (
@@ -39,11 +39,11 @@ function App() {
             <Desserts />
           </Route>
 
-          <Route path='/admin'>
+          <Route path='/admin' exact>
             <Admin />
           </Route>
-          <Route path='/actions'>
-            <Actions />
+          <Route path='/admin/ajouter'>
+            <AjouterArticle />
           </Route>
         </Switch>
       </div>
