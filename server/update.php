@@ -2,60 +2,34 @@
 // SET HEADER
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: POST");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 // INCLUDING DATABASE AND MAKING OBJECT
-require 'database.php';
+include_once ('database.php');
+include_once './class/articles.php';
 $db_connection = new Database();
-$conn = $db_connection->connect();
+$connect = $db_connection->connect();
 
-// CHECK GET ID PARAMETER OR NOT
-if(isset($_GET['id']))
+$item = new Article($connect);
+
+$data = json_decode(file_get_contents('php://input'));
+
+$item->id = $data->id;
+
+$item->name = $data->name;
+$item->description = $data->description;
+$item->price = $data->price;
+$item->image = $data->image;
+$item->category = $data->category;
+
+if($item->updateArticle()){
+    echo json_encode('Article modifié !');
+}
+else
 {
-    //IF HAS ID PARAMETER
-    $post_id = filter_var($_GET['id'], FILTER_VALIDATE_INT,[
-        'options' => ['default' => 'all_posts','min_range' => 1]
-    ]);
-}
-else{
-    $post_id = 'all_posts';
+    echo json_encode('Erreur lors de la modification...');
 }
 
-// MAKE SQL QUERY
-// IF GET POSTS ID, THEN SHOW POSTS BY ID OTHERWISE SHOW ALL POSTS
-$sql = is_numeric($post_id) ? "SELECT * FROM `items` WHERE id=".$post_id : "SELECT * FROM `items`"; 
-
-$stmt = $conn->prepare($sql);
-
-$stmt->execute();
-
-//CHECK WHETHER THERE IS ANY POST IN OUR DATABASE
-if($stmt->rowCount() > 0){
-    // CREATE POSTS ARRAY
-    $posts_array = [];
-    
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        
-        $post_data = [
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'description' => $row['description'],
-            'price' => $row['price'],
-            'image' => $row['image'],
-            'category' => $row['category']
-        ];
-        // PUSH POST DATA IN OUR $posts_array ARRAY
-        array_push($posts_array, $post_data);
-    }
-    //SHOW POST/POSTS IN JSON FORMAT
-    echo json_encode($posts_array);
- 
-
-}
-else{
-    //IF THER IS NO POST IN OUR DATABASE
-    echo json_encode(['message'=>'No post found']);
-}
 ?>
