@@ -33,7 +33,8 @@ if($itemCount > 0){
             'description' => $description,
             'price' => $price,
             'image' => $image,
-            'category' => $category
+            'category' => $category,
+            'categoryId' => $categoryId
         );
         array_push($articlesArray['body'],$post_data);
     }

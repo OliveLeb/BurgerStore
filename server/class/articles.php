@@ -23,7 +23,7 @@ class Article{
 
     // READ ALL ARTICLES
     public function getArticles(){
-        $sql = 'SELECT i.id,i.name,i.description,i.price,i.image,categories.name as category FROM items as i LEFT JOIN categories ON i.category = categories.id ORDER BY i.id DESC';
+        $sql = 'SELECT i.id,i.name,i.description,i.price,i.image,categories.name as category,categories.id as categoryId FROM items as i LEFT JOIN categories ON i.category = categories.id ORDER BY i.id DESC';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt;        

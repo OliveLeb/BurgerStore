@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import ActionCategories from '../../actions/actionsCategorie';
 import DataService from '../../services/Services';
 
-const AjouterArticle = () => {
+const AjouterArticle = ({ categories }) => {
   const history = useHistory();
-  const [categories] = ActionCategories();
+
   const initialValues = {
     name: '',
     description: '',

@@ -1,45 +1,32 @@
 import React from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 
-const Snacks = () => {
+const Snacks = ({ articles }) => {
   return (
     <div className='site'>
       <div className='row'>
-        <div className='col-sm-6 col-md-4'>
-          <div className='img-thumbnail'>
-            <img
-              src={require('../images/m1.png')}
-              alt='menu 1'
-              style={{ width: '100%', height: 'auto' }}
-            />
-            <div className='price'>8.90 €</div>
-            <div className='caption'>
-              <h4>Menu Classic</h4>
-              <p>Burger + Frites + Boisson</p>
-              <button className='btn btn-order '>
-                <FaShoppingCart /> Commander
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className='col-sm-6 col-md-4'>
-          <div className='img-thumbnail'>
-            <img
-              src={require('../images/m1.png')}
-              alt='menu 1'
-              style={{ width: '100%', height: 'auto' }}
-            />
-            <div className='price'>8.90 €</div>
-            <div className='caption'>
-              <h4>Menu Classic</h4>
-              <p>Burger + Frites + Boisson</p>
-              <button className='btn btn-order '>
-                <FaShoppingCart /> Commander
-              </button>
-            </div>
-          </div>
-        </div>
+        {articles.map(
+          (item) =>
+            item.category === 'Snacks' && (
+              <div className='col-sm-6 col-md-4 mb-5' key={item.id}>
+                <div className='img-thumbnail'>
+                  <img
+                    src={require(`../images/${item.image}`)}
+                    alt={item.name}
+                    style={{ width: '100%', height: 'auto' }}
+                  />
+                  <div className='price'>{item.price} €</div>
+                  <div className='caption'>
+                    <h4>{item.name}</h4>
+                    <p>{item.description}</p>
+                    <button className='btn btn-order'>
+                      <FaShoppingCart /> Commander
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+        )}
       </div>
     </div>
   );

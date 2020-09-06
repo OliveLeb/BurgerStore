@@ -14,9 +14,11 @@ $connect = $db_connection->connect();
 
 $item = new Article($connect);
 
-$data = json_decode(file_get_contents('php://input'));
+//$data = json_decode(file_get_contents('php://input'));
+// VERIFIER SI id dans l'url
+$item->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$item->id = $data->id;
+//$item->id = $data->id;
 
 if($item->deleteArticle()){
     echo json_encode('Article supprimé !');

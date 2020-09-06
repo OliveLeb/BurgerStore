@@ -2,7 +2,7 @@
 // SET HEADER
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: PUT");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -14,9 +14,9 @@ $connect = $db_connection->connect();
 
 $item = new Article($connect);
 
-$data = json_decode(file_get_contents('php://input'));
+$item->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$item->id = $data->id;
+$data = json_decode(file_get_contents('php://input'));
 
 $item->name = $data->name;
 $item->description = $data->description;

@@ -8,19 +8,12 @@ import FetchAllArticles from '../../actions/actionsArticles';
 import DataService from '../../services/Services';
 
 const Admin = () => {
-  const [idArticle, setIdArticle] = useState({ id: '' });
   const [isDeleted, setIsDeleted] = useState(false);
   const [articles, isLoading, hasError] = FetchAllArticles(isDeleted);
 
-  const deleteArticle = (itemId) => {
-    setIdArticle({ id: itemId });
-
-    const data = { id: itemId };
-
-    DataService.remove(data)
+  const deleteArticle = (id) => {
+    DataService.remove(id)
       .then((res) => {
-        setIdArticle({ id: res.data });
-        console.log(res.data);
         setIsDeleted(true);
       })
       .catch((e) => {
@@ -69,7 +62,7 @@ const Admin = () => {
                       </NavLink>
 
                       <NavLink
-                        to='*'
+                        to={`/admin/modifier/${item.id}`}
                         className='btn btn-primary btn-sm mr-1 ml-1'
                       >
                         <FaPencilAlt /> Modifier

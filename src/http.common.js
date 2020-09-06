@@ -6,7 +6,6 @@ const http = axios.create({
   headers: {
     'Content-type': 'application/json',
   },
-  timeout: 2000,
 });
 http.CancelToken = axios.CancelToken;
 

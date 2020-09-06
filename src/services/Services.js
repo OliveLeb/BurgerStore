@@ -12,12 +12,12 @@ const create = (data) => {
   return http.post('create.php', data);
 };
 
-const update = (data) => {
-  return http.put('update.php', data);
+const update = (id, data) => {
+  return http.put(`update.php/?id=${id}`, data);
 };
 
-const remove = (data) => {
-  return http.post('delete.php', data);
+const remove = (id) => {
+  return http.delete(`delete.php/?id=${id}`);
 };
 
 export default { getAll, getOne, create, update, remove };

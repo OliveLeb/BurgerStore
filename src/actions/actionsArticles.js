@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 //import axios from 'axios';
 import DataService from '../services/Services';
 
-//const urlRead = `http://localhost/projet/BurgerStoreReact/react-burgerstore/server/read.php`;
-
 const FetchAllArticles = (isDeleted) => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

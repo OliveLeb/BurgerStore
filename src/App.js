@@ -10,40 +10,50 @@ import Salades from './components/Salades';
 import Desserts from './components/Desserts';
 import Admin from './components/back/Admin';
 import AjouterArticle from './components/back/AjouterArticle';
+import ModifierArticle from './components/back/ModifierArticle';
+import FetchAllArticles from './actions/actionsArticles';
+import ActionCategories from './actions/actionsCategorie';
 
+//import DataService from './services/Services';
 function App() {
+  const [articles] = FetchAllArticles();
+  const [categories] = ActionCategories();
+
   return (
     <Router>
       <Navigation />
       <div className='container'>
         <Switch>
           <Route path='/' exact>
-            <Menus />
+            <Menus articles={articles} />
           </Route>
           <Route path='/menus'>
-            <Menus />
+            <Menus articles={articles} />
           </Route>
           <Route path='/burgers'>
-            <Burgers />
+            <Burgers articles={articles} />
           </Route>
           <Route path='/boissons'>
-            <Boissons />
+            <Boissons articles={articles} />
           </Route>
           <Route path='/snacks'>
-            <Snacks />
+            <Snacks articles={articles} />
           </Route>
           <Route path='/salades'>
-            <Salades />
+            <Salades articles={articles} />
           </Route>
           <Route path='/desserts'>
-            <Desserts />
+            <Desserts articles={articles} />
           </Route>
 
           <Route path='/admin' exact>
             <Admin />
           </Route>
           <Route path='/admin/ajouter'>
-            <AjouterArticle />
+            <AjouterArticle data={categories} />
+          </Route>
+          <Route path='/admin/modifier/:slug'>
+            <ModifierArticle categories={categories} articles={articles} />
           </Route>
         </Switch>
       </div>
