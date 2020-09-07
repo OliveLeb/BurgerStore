@@ -11,12 +11,13 @@ import Desserts from './components/Desserts';
 import Admin from './components/back/Admin';
 import AjouterArticle from './components/back/AjouterArticle';
 import ModifierArticle from './components/back/ModifierArticle';
-import FetchAllArticles from './actions/actionsArticles';
+import FetchArticles from './actions/actionsArticles';
 import ActionCategories from './actions/actionsCategorie';
+import ViewArticle from './components/back/ViewArticle';
 
 //import DataService from './services/Services';
 function App() {
-  const [articles] = FetchAllArticles();
+  const [articles] = FetchArticles();
   const [categories] = ActionCategories();
 
   return (
@@ -50,10 +51,13 @@ function App() {
             <Admin />
           </Route>
           <Route path='/admin/ajouter'>
-            <AjouterArticle data={categories} />
+            <AjouterArticle categories={categories} />
           </Route>
           <Route path='/admin/modifier/:slug'>
             <ModifierArticle categories={categories} articles={articles} />
+          </Route>
+          <Route path='/admin/view/:slug'>
+            <ViewArticle articles={articles} />
           </Route>
         </Switch>
       </div>

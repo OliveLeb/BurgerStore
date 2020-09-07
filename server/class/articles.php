@@ -22,8 +22,13 @@ class Article{
     }
 
     // READ ALL ARTICLES
-    public function getArticles(){
-        $sql = 'SELECT i.id,i.name,i.description,i.price,i.image,categories.name as category,categories.id as categoryId FROM items as i LEFT JOIN categories ON i.category = categories.id ORDER BY i.id DESC';
+    public function getArticles($post_id){
+
+
+        $sql = is_numeric($post_id) ? 'SELECT i.id,i.name,i.description,i.price,i.image,c.name as category,c.id as categoryId 
+        FROM '.$this->db_table.' as i LEFT JOIN categories as c ON i.category = c.id WHERE i.id='.$post_id 
+        :'SELECT i.id,i.name,i.description,i.price,i.image,c.name as category,c.id as categoryId 
+        FROM '.$this->db_table.' as i LEFT JOIN categories as c ON i.category = c.id ORDER BY i.id DESC';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt;        

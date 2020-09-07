@@ -14,16 +14,36 @@ $connect = $db_connection->connect();
 
 $items = new Article($connect);
 
-$stmt = $items->getArticles();
+
+// VERIFIER SI ID EN PARAMETRE URL
+if(isset($_GET['id']))
+{
+    // SI OUI
+    $post_id = filter_var($_GET['id'], FILTER_VALIDATE_INT,[
+        'options' => [
+            'default' => 'all_posts',
+            'min_range' => 1
+        ]
+    ]);
+}
+else{
+    $post_id = 'all_posts';
+}
+
+
+
+
+$stmt = $items->getArticles($post_id);
 $itemCount = $stmt->rowCount();
 
-//echo json_encode($itemCount);
+
 
 if($itemCount > 0){
 
     $articlesArray = array();
     $articlesArray['body'] = array();
     $articlesArray['itemCount'] = $itemCount;
+    
 
     while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
         extract($row);

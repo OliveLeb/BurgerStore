@@ -5,7 +5,7 @@ const getAll = () => {
 };
 
 const getOne = (id) => {
-  return http.get(`/admin/article/${id}`);
+  return http.get(`read.php/?id=${id}`);
 };
 
 const create = (data) => {

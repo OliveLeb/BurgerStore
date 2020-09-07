@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-//import axios from 'axios';
 import DataService from '../services/Services';
 
-const FetchAllArticles = (isDeleted) => {
+const FetchArticles = (isDeleted) => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
+
     const getArticles = () => {
       DataService.getAll()
         .then((res) => {
@@ -28,4 +28,4 @@ const FetchAllArticles = (isDeleted) => {
   return [articles, isLoading, hasError];
 };
 
-export default FetchAllArticles;
+export default FetchArticles;
