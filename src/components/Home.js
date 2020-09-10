@@ -1,7 +1,8 @@
 import React from 'react';
+import Englobant from '../HOC/Englobant';
 
-const Home = () => {
-  return <div>bonjour</div>;
+const Home = ({ articles }) => {
+  return <div style={{ color: 'white' }}>Bonjour</div>;
 };
 
-export default Home;
+export default Englobant(Home);

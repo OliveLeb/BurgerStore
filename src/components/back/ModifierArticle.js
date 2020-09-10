@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import DataService from '../../services/Services';
 import Article from '../commun/Article';
+import Englobant from '../../HOC/Englobant';
 
-const ModifierArticle = ({ categories, articles }) => {
+const ModifierArticle = ({ state, categories }) => {
+  const { articles } = state;
   const { slug } = useParams();
   const history = useHistory();
   const isBtnBuy = false;
@@ -153,4 +155,4 @@ const ModifierArticle = ({ categories, articles }) => {
   );
 };
 
-export default ModifierArticle;
+export default Englobant(ModifierArticle);

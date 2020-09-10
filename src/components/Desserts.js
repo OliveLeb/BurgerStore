@@ -1,8 +1,10 @@
 import React from 'react';
 import Article from './commun/Article';
+import Englobant from '../HOC/Englobant';
 
 const Desserts = ({ articles }) => {
   const isBtnBuy = true;
+
   return (
     <div className='site'>
       <div className='row'>
@@ -25,4 +27,4 @@ const Desserts = ({ articles }) => {
   );
 };
 
-export default Desserts;
+export default Englobant(Desserts);

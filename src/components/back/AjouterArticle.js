@@ -1,83 +1,44 @@
-import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import DataService from '../../services/Services';
+import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { CreateArticle } from '../../actions/actionsArticles';
 
-const AjouterArticle = ({ categories }) => {
-  const history = useHistory();
-
-  const initialValues = {
-    name: '',
-    description: '',
-    price: '',
-    image: '',
-    category: 0,
-  };
-  const [addedArticle, setAddedArticle] = useState(initialValues);
+const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
+  const inputImage = useRef(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const data = {
+    name: articleCreated.name,
+    description: articleCreated.description,
+    price: articleCreated.price,
+    image: articleCreated.image,
+    category: articleCreated.category,
+  };
+
+  CreateArticle(data, isSubmitted, setIsSubmitted);
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(addedArticle);
-
-    const data = {
-      name: addedArticle.name,
-      description: addedArticle.description,
-      price: addedArticle.price,
-      image: addedArticle.image,
-      category: addedArticle.category,
-    };
-    console.log(data);
-
-    DataService.create(data)
-      .then((res) => {
-        setAddedArticle({
-          name: res.data.name,
-          description: res.data.description,
-          price: res.data.price,
-          image: res.data.image,
-          category: res.data.category,
-        });
-        setIsSubmitted(true);
-        console.log(res.data);
-      })
-      .catch((e) => {
-        setIsSubmitted(false);
-        console.log(e);
-      });
-    history.push('/admin');
+    setIsSubmitted(true);
   };
 
   const updateField = (e) => {
-    setAddedArticle({
-      ...addedArticle,
+    dispatch({
+      type: 'NEW_ARTICLE',
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const updateImageInput = (e) => {
+    const imageName = inputImage.current.files[0].name;
+    dispatch({
+      type: 'NEW_ARTICLE',
+      image: imageName,
     });
   };
 
   return (
     <div className='row admin'>
       <h1>Ajouter un article</h1>
-      {/*isSubmitted && (
-          <div
-            className='toast'
-            role='alert'
-            aria-live='assertive'
-            aria-atomic='true'
-          >
-            <div className='toast-header'>
-              <strong className='mr-auto'>Burger Store</strong>
-              <button
-                type='button'
-                className='ml-2 mb-1 close'
-                data-dismiss='toast'
-                aria-label='Close'
-              >
-                <span aria-hidden='true'>&times;</span>
-              </button>
-            </div>
-            <div className='toast-body'>Article créé avec succès !</div>
-          </div>
-        )*/}
 
       <form className='form' onSubmit={submit}>
         <div className='form-group'>
@@ -88,7 +49,7 @@ const AjouterArticle = ({ categories }) => {
             id='name'
             name='name'
             placeholder='Nom'
-            value={addedArticle.name}
+            value={articleCreated.name}
             onChange={updateField}
           />
         </div>
@@ -101,7 +62,7 @@ const AjouterArticle = ({ categories }) => {
             id='description'
             name='description'
             placeholder='Description'
-            value={addedArticle.description}
+            value={articleCreated.description}
             onChange={updateField}
           />
         </div>
@@ -116,7 +77,7 @@ const AjouterArticle = ({ categories }) => {
             id='price'
             name='price'
             placeholder='Prix'
-            value={addedArticle.price}
+            value={articleCreated.price}
             onChange={updateField}
           />
         </div>
@@ -127,7 +88,7 @@ const AjouterArticle = ({ categories }) => {
             className='form-control'
             name='category'
             onChange={updateField}
-            value={addedArticle.category}
+            value={articleCreated.category}
           >
             <option value='0'>Choisir...</option>
             {categories.map((item) => (
@@ -140,23 +101,19 @@ const AjouterArticle = ({ categories }) => {
 
         <div className='form-group'>
           <label>Image :</label>
-          {/*
-            <input
-              type='file'
-              className='form-control-file'
-              id='image'
-              name='image'
-              value={addedArticle.image}
-              onChange={updateField}
-            />*/}
+
           <input
-            type='text'
-            className='form-control'
+            type='file'
+            className='form-control-file'
             id='image'
             name='image'
-            value={addedArticle.image}
-            onChange={updateField}
+            onChange={updateImageInput}
+            ref={inputImage}
           />
+
+          <button type='button' className='btn btn-primary'>
+            Upload
+          </button>
         </div>
 
         <button type='submit' className='btn btn-primary'>

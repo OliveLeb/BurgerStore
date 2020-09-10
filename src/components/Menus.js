@@ -1,8 +1,10 @@
 import React from 'react';
 import Article from './commun/Article';
+import Englobant from '../HOC/Englobant';
 
 const Menus = ({ articles }) => {
   const isBtnBuy = true;
+
   return (
     <div className='site'>
       <div className='row'>
@@ -25,4 +27,4 @@ const Menus = ({ articles }) => {
   );
 };
 
-export default Menus;
+export default Englobant(Menus);

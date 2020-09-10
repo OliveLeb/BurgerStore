@@ -1,25 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Admin.modules.css';
 import { NavLink } from 'react-router-dom';
 import { GoPlus } from 'react-icons/go';
 import { FaEye, FaPencilAlt } from 'react-icons/fa';
 import { ImCross } from 'react-icons/im';
-import FetchArticles from '../../actions/actionsArticles';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import DataService from '../../services/Services';
+import Englobant from '../../HOC/Englobant';
+//import DeleteArticle from '../../actions/actionsArticles';
 
-const Admin = () => {
+const Admin = ({ state, dispatch }) => {
   const [isDeleted, setIsDeleted] = useState(false);
-  const [articles, isLoading, hasError] = FetchArticles(isDeleted);
+  const { articles, isLoading, hasError } = state;
+
+  //const { isDeleted } = DeleteArticle()
 
   const deleteArticle = (id) => {
     DataService.remove(id)
       .then((res) => {
         setIsDeleted(true);
+        // dispatch(() => ({ type: 'DELETE_ARTICLE_SUCCESS' }));
       })
       .catch((e) => {
         console.log(e);
+        setIsDeleted(false);
+        // dispatch(() => ({ type: 'DELETE_ARTICLE_FAILURE' }));
       });
   };
+
+  useEffect(() => {
+    if (isDeleted) {
+      const notify = () => {
+        toast.success('Article supprimé avec succès !');
+      };
+      notify();
+    }
+  }, [isDeleted]);
 
   return (
     <div className='row admin'>
@@ -31,7 +48,8 @@ const Admin = () => {
         </NavLink>
       </h1>
 
-      {hasError && <span>Error !</span>}
+      <ToastContainer />
+      {hasError && <span>OOPSI, une erreur est survenue !</span>}
       {isLoading ? (
         <div className='spinner-border text-center' role='status'>
           <span className='sr-only'>Loading...</span>
@@ -87,4 +105,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default Englobant(Admin);

@@ -1,31 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import DataService from '../services/Services';
+import ArticleReducer, { initialState } from '../reducer/ArticleReducer';
+import { useHistory } from 'react-router-dom';
 
-const FetchArticles = (isDeleted) => {
-  const [articles, setArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-
+export const CreateArticle = (data, isSubmitted, setIsSubmitted) => {
+  const history = useHistory();
+  const [state, dispatch] = useReducer(ArticleReducer, initialState);
+  const { articleCreated, hasError } = state;
+  // const [isCreated, setIsCreated] = useState(false);
   useEffect(() => {
-    setIsLoading(true);
-
-    const getArticles = () => {
-      DataService.getAll()
-        .then((res) => {
-          setIsLoading(false);
-          const data = res.data.body;
-          setArticles(data);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsLoading(false);
-          setHasError(true);
-        });
+    const createArticle = () => {
+      if (isSubmitted) {
+        // setIsCreated(false);
+        DataService.create(data)
+          .then((res) => {
+            dispatch({
+              type: 'CREATE_ARTICLE_SUCCESS',
+              payload: {
+                name: res.data.name,
+                description: res.data.description,
+                price: res.data.price,
+                image: res.data.image,
+                category: res.data.category,
+              },
+            });
+            setIsSubmitted(false);
+            // setIsCreated(true);
+            history.push('/admin');
+          })
+          .catch((e) => {
+            console.log(e);
+            dispatch({
+              type: 'CREATE_ARTICLE_FAILURE',
+            });
+            // setIsCreated(false);
+          });
+      }
     };
-    return getArticles(articles);
-  }, [isDeleted]);
-
-  return [articles, isLoading, hasError];
+    createArticle();
+  }, [isSubmitted]);
+  return [articleCreated, hasError /*, isCreated*/];
 };
-
-export default FetchArticles;

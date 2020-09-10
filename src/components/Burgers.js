@@ -1,8 +1,11 @@
 import React from 'react';
 import Article from './commun/Article';
+import Englobant from '../HOC/Englobant';
 
-const Burgers = ({ articles }) => {
+const Burgers = ({ state }) => {
   const isBtnBuy = true;
+  const { articles } = state;
+
   return (
     <div className='site'>
       <div className='row'>
@@ -25,4 +28,4 @@ const Burgers = ({ articles }) => {
   );
 };
 
-export default Burgers;
+export default Englobant(Burgers);
