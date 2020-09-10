@@ -6,8 +6,8 @@ header("Access-Control-Allow-Methods: DELETE");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once 'database.php';
-include_once './class/articles.php';
+include_once '../database.php';
+include_once './../class/articles.php';
 
 $db_connection = new Database();
 $connect = $db_connection->connect();

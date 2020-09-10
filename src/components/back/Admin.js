@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Admin.modules.css';
 import { NavLink } from 'react-router-dom';
 import { GoPlus } from 'react-icons/go';
@@ -8,7 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DataService from '../../services/Services';
 import Englobant from '../../HOC/Englobant';
-//import DeleteArticle from '../../actions/actionsArticles';
 
 const Admin = ({ state, dispatch }) => {
   const { articles, isLoading, hasError, isDeleted } = state;
