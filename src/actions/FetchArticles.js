@@ -4,8 +4,7 @@ import DataService from '../services/Services';
 import { useParams } from 'react-router-dom';
 
 const FetchArticles = () => {
-  const { state, dispatch } = useContext(ArticleContext);
-  const { articles, articleById } = state;
+  const { dispatch } = useContext(ArticleContext);
 
   const { slug } = useParams();
 

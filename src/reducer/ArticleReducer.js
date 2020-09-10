@@ -10,6 +10,7 @@ export const initialState = {
   },
   isLoading: false,
   hasError: false,
+  isDeleted: false,
 };
 
 const ArticleReducer = (state, action) => {
@@ -60,6 +61,17 @@ const ArticleReducer = (state, action) => {
         ...state,
         articleCreated: { ...state.article, ...action.payload },
         hasError: true,
+      };
+    case 'DELETE_ARTICLE_SUCCESS':
+      return {
+        ...state,
+        articles: [...action.payload],
+        isDeleted: true,
+      };
+    case 'DELETE_ARTICLE_FAILURE':
+      return {
+        ...state,
+        isDeleted: false,
       };
     default:
       return {

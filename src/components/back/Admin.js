@@ -11,21 +11,19 @@ import Englobant from '../../HOC/Englobant';
 //import DeleteArticle from '../../actions/actionsArticles';
 
 const Admin = ({ state, dispatch }) => {
-  const [isDeleted, setIsDeleted] = useState(false);
-  const { articles, isLoading, hasError } = state;
-
-  //const { isDeleted } = DeleteArticle()
+  const { articles, isLoading, hasError, isDeleted } = state;
 
   const deleteArticle = (id) => {
     DataService.remove(id)
       .then((res) => {
-        setIsDeleted(true);
-        // dispatch(() => ({ type: 'DELETE_ARTICLE_SUCCESS' }));
+        const remainingResult = articles.filter((result) => result.id !== id);
+        dispatch({
+          type: 'DELETE_ARTICLE_SUCCESS',
+          payload: remainingResult,
+        });
       })
       .catch((e) => {
         console.log(e);
-        setIsDeleted(false);
-        // dispatch(() => ({ type: 'DELETE_ARTICLE_FAILURE' }));
       });
   };
 
