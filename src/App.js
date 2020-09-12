@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Navigation from './components/commun/Navigation';
@@ -14,13 +14,10 @@ import AjouterArticle from './components/back/AjouterArticle';
 import ModifierArticle from './components/back/ModifierArticle';
 import ActionCategories from './actions/actionsCategorie';
 import ViewArticle from './components/back/ViewArticle';
-import ArticleReducer, { initialState } from './reducer/ArticleReducer';
 import { Provider as ArticleProvider } from './context/ArticleContext';
 
 function App() {
   const [categories] = ActionCategories();
-  const [state, dispatch] = useReducer(ArticleReducer, initialState);
-  const { articleCreated } = state;
 
   return (
     <Router>
@@ -54,11 +51,7 @@ function App() {
               <Admin />
             </Route>
             <Route path='/admin/ajouter'>
-              <AjouterArticle
-                categories={categories}
-                dispatch={dispatch}
-                articleCreated={articleCreated}
-              />
+              <AjouterArticle categories={categories} />
             </Route>
             <Route path='/admin/modifier/:slug'>
               <ModifierArticle categories={categories} />

@@ -15,9 +15,7 @@ const ViewArticle = ({ state }) => {
         <NavLink to='/admin/'>Retour</NavLink>
       </div>
       <div className='row'>
-        <div className='col-sm-3'>
-          {name}, {description},{price},{image}{' '}
-        </div>
+        <div className='col-sm-3'></div>
         <div className='col-sm-6'>
           {
             <Article

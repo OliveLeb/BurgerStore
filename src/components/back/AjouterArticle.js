@@ -1,24 +1,28 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { CreateArticle } from '../../actions/actionsArticles';
+import CreateArticle from '../../actions/actionsArticles';
+import UploadFiles from '../../actions/UploadFiles';
+import Englobant from '../../HOC/Englobant';
 
-const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
+const AjouterArticle = ({ categories, dispatch, state }) => {
   const inputImage = useRef(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { articleCreated, selectedFiles, isUploaded } = state;
+  const { name, description, price, category } = articleCreated;
 
-  const data = {
-    name: articleCreated.name,
-    description: articleCreated.description,
-    price: articleCreated.price,
-    image: articleCreated.image,
-    category: articleCreated.category,
-  };
+  useEffect(() => {
+    dispatch({
+      type: 'CREATE_INIT',
+    });
+  }, []);
 
-  CreateArticle(data, isSubmitted, setIsSubmitted);
+  CreateArticle();
+  UploadFiles();
 
   const submit = (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    dispatch({
+      type: 'SUBMIT_SUCCESS',
+    });
   };
 
   const updateField = (e) => {
@@ -35,11 +39,22 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
       image: imageName,
     });
   };
+  const upload = () => {
+    dispatch({
+      type: 'UPLOAD_SUCCESS',
+      selectedFiles: inputImage.current.files[0],
+    });
+  };
+
+  const cancel = () => {
+    dispatch({
+      type: 'SUBMIT_CANCELLED',
+    });
+  };
 
   return (
     <div className='row admin'>
       <h1>Ajouter un article</h1>
-
       <form className='form' onSubmit={submit}>
         <div className='form-group'>
           <label>Nom :</label>
@@ -49,7 +64,7 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
             id='name'
             name='name'
             placeholder='Nom'
-            value={articleCreated.name}
+            value={name || ''}
             onChange={updateField}
           />
         </div>
@@ -62,7 +77,7 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
             id='description'
             name='description'
             placeholder='Description'
-            value={articleCreated.description}
+            value={description || ''}
             onChange={updateField}
           />
         </div>
@@ -77,7 +92,7 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
             id='price'
             name='price'
             placeholder='Prix'
-            value={articleCreated.price}
+            value={price || ''}
             onChange={updateField}
           />
         </div>
@@ -88,7 +103,7 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
             className='form-control'
             name='category'
             onChange={updateField}
-            value={articleCreated.category}
+            value={category || ''}
           >
             <option value='0'>Choisir...</option>
             {categories.map((item) => (
@@ -98,28 +113,28 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
             ))}
           </select>
         </div>
-
         <div className='form-group'>
           <label>Image :</label>
+          <div className='d-flex justify-content-start'>
+            <input
+              type='file'
+              className='form-control-file'
+              id='image'
+              name='image'
+              onChange={updateImageInput}
+              ref={inputImage}
+            />
 
-          <input
-            type='file'
-            className='form-control-file'
-            id='image'
-            name='image'
-            onChange={updateImageInput}
-            ref={inputImage}
-          />
-
-          <button type='button' className='btn btn-primary'>
-            Upload
-          </button>
+            <button type='button' className='btn btn-primary' onClick={upload}>
+              Upload
+            </button>
+          </div>
         </div>
 
         <button type='submit' className='btn btn-primary'>
           Ajouter
         </button>
-        <Link to='/admin' className='btn btn-danger ml-2'>
+        <Link to='/admin' className='btn btn-danger ml-2' onClick={cancel}>
           Annuler
         </Link>
       </form>
@@ -127,4 +142,4 @@ const AjouterArticle = ({ categories, dispatch, articleCreated }) => {
   );
 };
 
-export default AjouterArticle;
+export default Englobant(AjouterArticle);

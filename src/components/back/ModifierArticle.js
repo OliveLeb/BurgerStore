@@ -1,34 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import DataService from '../../services/Services';
 import Article from '../commun/Article';
 import Englobant from '../../HOC/Englobant';
 
-const ModifierArticle = ({ state, categories }) => {
-  const { articles } = state;
+const ModifierArticle = ({ state, dispatch, categories }) => {
+  const { articleById } = state;
+  const { name, description, price, image, category } = articleById;
+  const inputImage = useRef();
   const { slug } = useParams();
   const history = useHistory();
   const isBtnBuy = false;
-
-  const item = articles.find((item) => item.id === slug);
-
-  const [articleById, setArticleById] = useState({
-    name: item.name,
-    description: item.description,
-    price: item.price,
-    image: item.image,
-    category: item.categoryId,
-  });
 
   const submit = (e) => {
     e.preventDefault();
 
     const data = {
-      name: articleById.name,
-      description: articleById.description,
-      price: articleById.price,
-      image: articleById.image,
-      category: articleById.category,
+      name: name,
+      description: description,
+      price: price,
+      image: image,
+      category: category,
     };
     const id = slug;
     DataService.update(id, data)
@@ -43,16 +35,23 @@ const ModifierArticle = ({ state, categories }) => {
   };
 
   const updateField = (e) => {
-    setArticleById({
-      ...articleById,
+    dispatch({
+      type: 'NEW_ARTICLE',
       [e.target.name]: e.target.value,
+    });
+  };
+  const updateImageInput = (e) => {
+    const imageName = inputImage.current.files[0].name;
+    dispatch({
+      type: 'NEW_ARTICLE',
+      image: imageName,
     });
   };
 
   return (
     <div className='row admin'>
       <div className='col-sm-6'>
-        <h1>Ajouter un article</h1>
+        <h1>Modifier un article</h1>
 
         <form className='form' onSubmit={submit}>
           <div className='form-group'>
@@ -63,11 +62,10 @@ const ModifierArticle = ({ state, categories }) => {
               id='name'
               name='name'
               placeholder='Nom'
-              value={articleById.name}
+              value={name || ''}
               onChange={updateField}
             />
           </div>
-
           <div className='form-group'>
             <label>Description :</label>
             <input
@@ -76,11 +74,10 @@ const ModifierArticle = ({ state, categories }) => {
               id='description'
               name='description'
               placeholder='Description'
-              value={articleById.description}
+              value={description || ''}
               onChange={updateField}
             />
           </div>
-
           <div className='form-group'>
             <label>Prix (€) :</label>
             <input
@@ -91,18 +88,17 @@ const ModifierArticle = ({ state, categories }) => {
               id='price'
               name='price'
               placeholder='Prix'
-              value={articleById.price}
+              value={price || ''}
               onChange={updateField}
             />
           </div>
-
           <div className='form-group'>
             <label>Catégorie :</label>
             <select
               className='form-control'
               name='category'
               onChange={updateField}
-              value={articleById.category}
+              value={category || ''}
             >
               {categories.map((item) => (
                 <option value={item.id} key={item.id}>
@@ -111,43 +107,38 @@ const ModifierArticle = ({ state, categories }) => {
               ))}
             </select>
           </div>
-
           <div className='form-group'>
             <label>Image :</label>
-
-            {/*<input
-              type='file'
-              className='form-control-file'
-              id='image'
-              name='image'
-              value={articleById.image}
-              onChange={updateField}
-            />*/}
-            <input
-              type='text'
-              className='form-control'
-              id='image'
-              name='image'
-              value={articleById.image}
-              onChange={updateField}
-            />
+            <div className='d-flex justify-content-start'>
+              <input
+                type='file'
+                className='form-control-file'
+                id='image'
+                name='image'
+                ref={inputImage}
+                onChange={updateImageInput}
+              />
+              <button className='btn btn-primary'>Upload</button>
+            </div>
           </div>
-
-          <button type='submit' className='btn btn-primary'>
-            Modifier
-          </button>
-          <Link to='/admin' className='btn btn-danger ml-2'>
-            Annuler
-          </Link>
+          (Pas besoin de reupload l'image si elle ne change pas.)
+          <div className='row mt-5 justify-content-center'>
+            <button type='submit' className='btn btn-primary'>
+              Modifier
+            </button>
+            <Link to='/admin' className='btn btn-danger ml-2'>
+              Annuler
+            </Link>
+          </div>
         </form>
       </div>
 
       <div className='col-sm-6'>
         <Article
-          name={articleById.name}
-          description={articleById.description}
-          price={articleById.price}
-          image={articleById.image}
+          name={name}
+          description={description}
+          price={price}
+          image={image}
           btnBuy={isBtnBuy}
         />
       </div>

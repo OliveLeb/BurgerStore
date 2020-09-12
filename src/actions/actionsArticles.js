@@ -1,17 +1,22 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useContext } from 'react';
 import DataService from '../services/Services';
-import ArticleReducer, { initialState } from '../reducer/ArticleReducer';
 import { useHistory } from 'react-router-dom';
+import { Context as ArticleContext } from '../context/ArticleContext';
 
-export const CreateArticle = (data, isSubmitted, setIsSubmitted) => {
+const CreateArticle = () => {
   const history = useHistory();
-  const [state, dispatch] = useReducer(ArticleReducer, initialState);
-  const { articleCreated, hasError } = state;
-  // const [isCreated, setIsCreated] = useState(false);
+  const { state, dispatch } = useContext(ArticleContext);
+  const { articleCreated, isSubmitted } = state;
+  const data = {
+    name: articleCreated.name,
+    description: articleCreated.description,
+    price: articleCreated.price,
+    image: articleCreated.image,
+    category: articleCreated.category,
+  };
   useEffect(() => {
     const createArticle = () => {
       if (isSubmitted) {
-        // setIsCreated(false);
         DataService.create(data)
           .then((res) => {
             dispatch({
@@ -24,8 +29,7 @@ export const CreateArticle = (data, isSubmitted, setIsSubmitted) => {
                 category: res.data.category,
               },
             });
-            setIsSubmitted(false);
-            // setIsCreated(true);
+            console.log(res);
             history.push('/admin');
           })
           .catch((e) => {
@@ -33,11 +37,11 @@ export const CreateArticle = (data, isSubmitted, setIsSubmitted) => {
             dispatch({
               type: 'CREATE_ARTICLE_FAILURE',
             });
-            // setIsCreated(false);
           });
       }
     };
     createArticle();
   }, [isSubmitted]);
-  return [articleCreated, hasError /*, isCreated*/];
 };
+
+export default CreateArticle;

@@ -18,7 +18,7 @@ const ActionsCategories = () => {
           console.log(error);
         });
     };
-    return getCategories(categories);
+    if (categories == '') getCategories(categories);
   });
 
   return [categories];

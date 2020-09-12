@@ -4,7 +4,8 @@ import DataService from '../services/Services';
 import { useParams } from 'react-router-dom';
 
 const FetchArticles = () => {
-  const { dispatch } = useContext(ArticleContext);
+  const { state, dispatch } = useContext(ArticleContext);
+  const { articles, isCreated } = state;
 
   const { slug } = useParams();
 
@@ -51,7 +52,11 @@ const FetchArticles = () => {
         });
     };
 
-    isNaN(slug) ? getArticles() : fecthById();
+    if (isNaN(slug) && (articles.length === 0 || isCreated)) {
+      getArticles();
+    } else if (!isNaN(slug)) {
+      fecthById();
+    }
   }, []);
 };
 
