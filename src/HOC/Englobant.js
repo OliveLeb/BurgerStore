@@ -9,12 +9,7 @@ const Englobant = (WrappedComponent) => (props) => {
     <ArticleContext.Consumer>
       {({ state, dispatch }) => {
         return (
-          <WrappedComponent
-            {...props}
-            articles={state.articles}
-            state={state}
-            dispatch={dispatch}
-          />
+          <WrappedComponent {...props} state={state} dispatch={dispatch} />
         );
       }}
     </ArticleContext.Consumer>

@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Admin.modules.css';
 import { NavLink } from 'react-router-dom';
 import { GoPlus } from 'react-icons/go';
 import { FaEye, FaPencilAlt } from 'react-icons/fa';
 import { ImCross } from 'react-icons/im';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DataService from '../../services/Services';
 import Englobant from '../../HOC/Englobant';
 
 const Admin = ({ state, dispatch }) => {
-  const { articles, isLoading, hasError, isDeleted } = state;
+  const { articles, isLoading, hasError } = state;
 
   const deleteArticle = (id) => {
     DataService.remove(id)
@@ -20,20 +19,16 @@ const Admin = ({ state, dispatch }) => {
           type: 'DELETE_ARTICLE_SUCCESS',
           payload: remainingResult,
         });
+        toast.success('Article supprimé avec succès !');
       })
       .catch((e) => {
         console.log(e);
+        dispatch({
+          type: 'HAS_ERROR',
+        });
+        toast.error("Erreur lors de la suppression de l'article...");
       });
   };
-
-  useEffect(() => {
-    if (isDeleted) {
-      const notify = () => {
-        toast.success('Article supprimé avec succès !');
-      };
-      notify();
-    }
-  }, [isDeleted]);
 
   return (
     <div className='row admin'>
@@ -46,8 +41,9 @@ const Admin = ({ state, dispatch }) => {
       </h1>
 
       <ToastContainer />
-      {hasError && <span>OOPSI, une erreur est survenue !</span>}
-      {isLoading ? (
+      {hasError ? (
+        <span>OOPSI, une erreur est survenue !</span>
+      ) : isLoading ? (
         <div className='spinner-border text-center' role='status'>
           <span className='sr-only'>Loading...</span>
         </div>

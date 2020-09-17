@@ -1,13 +1,21 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import CreateArticle from '../../actions/actionsArticles';
+import CreateArticle from '../../actions/CreateArticle';
 import UploadFiles from '../../actions/UploadFiles';
 import Englobant from '../../HOC/Englobant';
+import {
+  cancel,
+  upload,
+  updateField,
+  updateImageInput,
+} from '../../actions/actions';
+import { ToastContainer } from 'react-toastify';
 
 const AjouterArticle = ({ categories, dispatch, state }) => {
   const inputImage = useRef(null);
-  const { articleCreated, selectedFiles, isUploaded } = state;
-  const { name, description, price, category } = articleCreated;
+
+  const { isUploaded, articleById } = state;
+  const { name, description, price, category, image } = articleById;
 
   useEffect(() => {
     dispatch({
@@ -15,7 +23,7 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
     });
   }, []);
 
-  CreateArticle();
+  CreateArticle(state, dispatch);
   UploadFiles();
 
   const submit = (e) => {
@@ -25,36 +33,21 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
     });
   };
 
-  const updateField = (e) => {
-    dispatch({
-      type: 'NEW_ARTICLE',
-      [e.target.name]: e.target.value,
-    });
+  const canBeSubmitted = () => {
+    return (
+      name.length < 0 &&
+      description.length < 0 &&
+      price.length < 0 &&
+      //!isUploaded &&
+      category == 0
+    );
   };
-
-  const updateImageInput = (e) => {
-    const imageName = inputImage.current.files[0].name;
-    dispatch({
-      type: 'NEW_ARTICLE',
-      image: imageName,
-    });
-  };
-  const upload = () => {
-    dispatch({
-      type: 'UPLOAD_SUCCESS',
-      selectedFiles: inputImage.current.files[0],
-    });
-  };
-
-  const cancel = () => {
-    dispatch({
-      type: 'SUBMIT_CANCELLED',
-    });
-  };
+  const isEnabled = canBeSubmitted;
 
   return (
     <div className='row admin'>
       <h1>Ajouter un article</h1>
+      <ToastContainer />
       <form className='form' onSubmit={submit}>
         <div className='form-group'>
           <label>Nom :</label>
@@ -65,7 +58,7 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
             name='name'
             placeholder='Nom'
             value={name || ''}
-            onChange={updateField}
+            onChange={updateField(dispatch)}
           />
         </div>
 
@@ -78,7 +71,7 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
             name='description'
             placeholder='Description'
             value={description || ''}
-            onChange={updateField}
+            onChange={updateField(dispatch)}
           />
         </div>
 
@@ -92,8 +85,8 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
             id='price'
             name='price'
             placeholder='Prix'
-            value={price || ''}
-            onChange={updateField}
+            value={price || 0}
+            onChange={updateField(dispatch)}
           />
         </div>
 
@@ -102,7 +95,7 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
           <select
             className='form-control'
             name='category'
-            onChange={updateField}
+            onChange={updateField(dispatch)}
             value={category || ''}
           >
             <option value='0'>Choisir...</option>
@@ -121,20 +114,29 @@ const AjouterArticle = ({ categories, dispatch, state }) => {
               className='form-control-file'
               id='image'
               name='image'
-              onChange={updateImageInput}
+              onChange={updateImageInput(dispatch, inputImage)}
               ref={inputImage}
             />
 
-            <button type='button' className='btn btn-primary' onClick={upload}>
+            <button
+              type='button'
+              className='btn btn-primary'
+              onClick={upload(dispatch, inputImage)}
+              disabled={!image}
+            >
               Upload
             </button>
           </div>
         </div>
 
-        <button type='submit' className='btn btn-primary'>
+        <button type='submit' className='btn btn-primary' disabled={isEnabled}>
           Ajouter
         </button>
-        <Link to='/admin' className='btn btn-danger ml-2' onClick={cancel}>
+        <Link
+          to='/admin'
+          className='btn btn-danger ml-2'
+          onClick={cancel(dispatch)}
+        >
           Annuler
         </Link>
       </form>

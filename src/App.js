@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Navigation from './components/commun/Navigation';
+import Footer from './components/commun/Footer';
 import Home from './components/Home';
 import Menus from './components/Menus';
 import Burgers from './components/Burgers';
@@ -22,44 +24,47 @@ function App() {
   return (
     <Router>
       <ArticleProvider>
-        <Navigation />
-        <div className='container'>
-          <Switch>
-            <Route path='/' exact>
-              <Home />
-            </Route>
-            <Route path='/menus'>
-              <Menus />
-            </Route>
-            <Route path='/burgers'>
-              <Burgers />
-            </Route>
-            <Route path='/boissons'>
-              <Boissons />
-            </Route>
-            <Route path='/snacks'>
-              <Snacks />
-            </Route>
-            <Route path='/salades'>
-              <Salades />
-            </Route>
-            <Route path='/desserts'>
-              <Desserts />
-            </Route>
+        <div className='app'>
+          <Navigation />
+          <div className='container'>
+            <Switch>
+              <Route path='/' exact>
+                <Home />
+              </Route>
+              <Route path='/menus'>
+                <Menus />
+              </Route>
+              <Route path='/burgers'>
+                <Burgers />
+              </Route>
+              <Route path='/boissons'>
+                <Boissons />
+              </Route>
+              <Route path='/snacks'>
+                <Snacks />
+              </Route>
+              <Route path='/salades'>
+                <Salades />
+              </Route>
+              <Route path='/desserts'>
+                <Desserts />
+              </Route>
 
-            <Route path='/admin' exact>
-              <Admin />
-            </Route>
-            <Route path='/admin/ajouter'>
-              <AjouterArticle categories={categories} />
-            </Route>
-            <Route path='/admin/modifier/:slug'>
-              <ModifierArticle categories={categories} />
-            </Route>
-            <Route path='/admin/view/:slug'>
-              <ViewArticle />
-            </Route>
-          </Switch>
+              <Route path='/admin' exact>
+                <Admin />
+              </Route>
+              <Route path='/admin/ajouter'>
+                <AjouterArticle categories={categories} />
+              </Route>
+              <Route path='/admin/modifier/:slug'>
+                <ModifierArticle categories={categories} />
+              </Route>
+              <Route path='/admin/view/:slug'>
+                <ViewArticle />
+              </Route>
+            </Switch>
+          </div>
+          <Footer />
         </div>
       </ArticleProvider>
     </Router>

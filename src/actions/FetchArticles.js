@@ -23,7 +23,7 @@ const FetchArticles = () => {
         })
         .catch((error) => {
           console.log(error);
-          dispatch({ type: 'GET_ARTICLEBYID_FAILURE' });
+          dispatch({ type: 'HAS_ERROR' });
         });
     };
 
@@ -48,13 +48,14 @@ const FetchArticles = () => {
         })
         .catch((error) => {
           console.log(error);
-          dispatch({ type: 'GET_ARTICLES_FAILURE' });
+          dispatch({ type: 'HAS_ERROR' });
         });
     };
 
-    if (isNaN(slug) && (articles.length === 0 || isCreated)) {
+    if (articles.length === 0 || isCreated) {
       getArticles();
-    } else if (!isNaN(slug)) {
+    }
+    if (!isNaN(slug)) {
       fecthById();
     }
   }, []);

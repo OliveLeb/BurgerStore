@@ -8,7 +8,7 @@ const Article = ({ image, name, price, description, btnBuy, error }) => {
     <div className='img-thumbnail'>
       {image != null ? (
         <img
-          src={require(`./../../images/${image}`)}
+          src={`http://localhost/projet/BurgerStoreReact/react-burgerstore/server/uploads/${image}`}
           alt={name}
           style={{ width: '100%', height: 'auto' }}
         />

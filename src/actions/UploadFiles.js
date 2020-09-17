@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { Context as ArticleContext } from '../context/ArticleContext';
 import UploadService from '../services/Services';
+import { toast } from 'react-toastify';
 
 const UploadFiles = () => {
   const { state } = useContext(ArticleContext);
-  const { isUploaded, selectedFiles, articleCreated } = state;
+  const { isUploaded, selectedFiles } = state;
 
   useEffect(() => {
     const submitForm = () => {
@@ -12,11 +13,11 @@ const UploadFiles = () => {
       formData.append('image', selectedFiles.selectedFiles);
       UploadService.upload(formData)
         .then((res) => {
-          console.log(articleCreated.image);
+          toast.success('Image upload avec succès !');
         })
         .catch((e) => {
           console.log(e);
-          alert('File upload error');
+          toast.error("Erreur lors de l'upload de l'image");
         });
     };
 

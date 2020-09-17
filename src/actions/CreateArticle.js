@@ -1,18 +1,17 @@
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import DataService from '../services/Services';
 import { useHistory } from 'react-router-dom';
-import { Context as ArticleContext } from '../context/ArticleContext';
+import { toast } from 'react-toastify';
 
-const CreateArticle = () => {
+const CreateArticle = (state, dispatch) => {
   const history = useHistory();
-  const { state, dispatch } = useContext(ArticleContext);
-  const { articleCreated, isSubmitted } = state;
+  const { articleById, isSubmitted } = state;
   const data = {
-    name: articleCreated.name,
-    description: articleCreated.description,
-    price: articleCreated.price,
-    image: articleCreated.image,
-    category: articleCreated.category,
+    name: articleById.name,
+    description: articleById.description,
+    price: articleById.price,
+    image: articleById.image,
+    category: articleById.category,
   };
   useEffect(() => {
     const createArticle = () => {
@@ -29,14 +28,15 @@ const CreateArticle = () => {
                 category: res.data.category,
               },
             });
-            console.log(res);
             history.push('/admin');
+            toast.success('Article créé avec succès !');
           })
           .catch((e) => {
             console.log(e);
             dispatch({
               type: 'CREATE_ARTICLE_FAILURE',
             });
+            toast.error("Impossible de créer l'article...");
           });
       }
     };
