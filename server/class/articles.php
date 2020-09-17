@@ -21,7 +21,7 @@ class Article{
         $this->connection = $db;
     }
 
-    // READ ALL ARTICLES
+    // READ ALL ARTICLES OR ONE
     public function getArticles($post_id){
 
 
