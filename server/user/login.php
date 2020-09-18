@@ -2,39 +2,34 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-
-include_once '../database.php';
+include_once ('../database.php');
 include_once './../class/users.php';
 
 $db_connection = new Database();
 $connect = $db_connection->connect();
 
-$item = new User($connect);
+$items = new User($connect);
 
-// get data from request
 $data = json_decode(file_get_contents('php://input'));
 
-
-$item->name = trim($data->name);
-$item->firstname = trim($data->firstname);
-$item->email = trim($data->email);
-$item->username = trim($data->username);
+$item->username = $data->username;
 $item->password = $data->password;
-$item->role = trim($data->role);
-$item->status = $data->status;
 
-if($item->createUser())
+if($item->logIn())
 {
-    echo 'Utilisateur créé avec succès !';
+    echo 'Utilisateur connecté !';
 }
-else 
+else
 {
-    echo 'Erreur lors de la création..';
+    echo 'Erreur lors de la connexion..';
 };
+
+
+
 
 
 

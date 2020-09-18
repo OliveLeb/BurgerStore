@@ -15,20 +15,22 @@ class User{
     public $password;
     public $role;
     public $status;
+    private $authenticated;
 
 
     public function __construct($db){
         $this->connection = $db;
+        $this->authenticated = FALSE;
     }
 
 
 
 // RULES
 
-public function isNameValid(string $name):bool{
+public function isNameValid(string $name, string $firstname):bool{
     $valid = TRUE;
-    $length = mb_strlen($name);
-    if(($length<4)||($length>16))
+    $regex ='/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/';
+    if(preg_match($regex,$name,$firstname) === 0)
     {
         $valid=FALSE;
     }
@@ -36,8 +38,8 @@ public function isNameValid(string $name):bool{
 }
 public function isPassValid(string $password):bool{
     $valid = TRUE;
-    $regex = '/^(?=.*[.*=\d])(?=.*[a-z])(?=.*[A-Z]){6,16}$/';
-    if(preg_match($regex,$password)){
+    $regex ='/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
+    if(preg_match($regex,$password) === 0){
         $valid=FALSE;
     }
     return $valid;
@@ -50,7 +52,59 @@ public function isEmailValid(string $email):bool{
     }
     return $valid;
 }
+public function isUsernameValid(string $username):bool{
+    $valid=TRUE;
+    $length = mb_strlen($username);
+    if(!ctype_alnum($username))
+    {
+        $valid = FALSE;
+    }
+    if(($length<3) || ($length>16))
+    {
+        $valid = FALSE;
+    }
+    return $valid;
+}
+// CHECK IF EMAIL OR USERNAME ALLREADY EXIST
+public function doesEmailUsernameExist(string $email, string $username){
+    $message ='';
+    if(!$this->isEmailValid($email))
+    {
+        throw new Exception('Email non valide.');
+    }
 
+    $id= NULL;
+
+    $sql = 'SELECT * FROM '.$this->db_table.' WHERE email = :email OR username = :username';
+    $values = array(':email' => $email,':username' => $username);
+    try{
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($values);
+    }
+    catch(PDOException $e){
+        throw new Exception('Database query error');
+    }
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($email==isset($row['email'])){
+        $message = 'Email deja utilisé';
+         throw new Exception($message);
+    }
+    else if($username==isset($row['username'])){
+        $message = 'username deja utilisé';
+         throw new Exception($message);
+    };
+
+}
+
+// CHECK ROLE
+public function isRoleValid(string $role):bool{
+    $valid = TRUE;
+    if(preg_match('/(admin|visitor|client)/i',$role) === 0){
+        $valid = FALSE;
+    }
+    return $valid;
+}
 
 
 
@@ -75,19 +129,31 @@ public function isEmailValid(string $email):bool{
 
         $stmt = $this->connection->prepare($sql);
 
-        if(!$this->isNameValid($this->name))
+        if(!$this->isNameValid($this->name,$this->firstname))
         {
-            throw new Exception('Nom non valide');
+            throw new Exception('Nom ou prénom non valide');
+        }
+
+        if(!$this->isUsernameValid($this->username)){
+            throw new Exception('Username non valide.');
         }
 
         if(!$this->isPassValid($this->password))
         {
             throw new Exception('Mot de passe non valide.');
         }
+
         if (!$this->isEmailValid($this->email)) 
         {
             throw new Exception('Adresse mail non valide.');
         } 
+      
+        $this->doesEmailUsernameExist($this->email,$this->username);
+
+        if(!$this->isRoleValid($this->role)){
+            throw new Exception('Role non valide.');
+        }
+        
 
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->firstname=htmlspecialchars(strip_tags($this->firstname));
@@ -113,6 +179,54 @@ public function isEmailValid(string $email):bool{
         }
         return false;
 
+    }
+
+    public function logIn(string $username, string $email, string $password):bool{
+
+        $username = trim($username);
+        $email = trim($email);
+        $password = trim($password);
+
+        if(!$this->isUsernameValid($this->username)){
+            return FALSE;
+        }
+
+        if(!$this->isEmailValid($this->email)){
+            return FALSE;
+        }
+
+        if(!$this->isPasswordValid($password)){
+            return FALSE;
+        }
+
+        $sql = 'SELECT * FROM '.$this->db_table.' WHERE (username = :username OR email = :email) AND (status =1)';
+
+        $values = array(':username' => $name, ':email' => $email);
+
+        try{
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute($values);
+        }
+        catch (PDOException $e){
+            throw new Exception('Database query error');
+        }
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(is_array($row))
+        {
+            if(password_verify($password,$row['password']))
+            {
+                $this->id = intval($row['id'],10);
+                $this->username = $username;
+                $this->email = $email;
+                $this->authenticated = TRUE;
+
+                return TRUE;
+            }
+        }
+
+        return FALSE;
     }
 
 
