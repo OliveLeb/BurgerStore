@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # donnée connexion php
-database.php
+dataConnexion.php
