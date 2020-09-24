@@ -82,7 +82,11 @@ const Admin = ({ state, dispatch }) => {
                     </NavLink>
 
                     <button
-                      onClick={() => deleteArticle(item.id)}
+                      onClick={() => {
+                        if (window.confirm("Supprimer l'article ?")) {
+                          deleteArticle(item.id);
+                        }
+                      }}
                       className='btn btn-danger btn-sm'
                     >
                       <ImCross /> Supprimer
