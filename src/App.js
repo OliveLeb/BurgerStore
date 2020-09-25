@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Navigation from './components/commun/Navigation';
 import Footer from './components/commun/Footer';
+import NotFound from './components/commun/NotFound';
 import Home from './components/Home';
 import Menus from './components/Menus';
 import Burgers from './components/Burgers';
@@ -31,36 +32,39 @@ function App() {
               <Route path='/' exact>
                 <Home />
               </Route>
-              <Route path='/menus'>
+              <Route path='/menus' exact>
                 <Menus />
               </Route>
-              <Route path='/burgers'>
+              <Route path='/burgers' exact>
                 <Burgers />
               </Route>
-              <Route path='/boissons'>
+              <Route path='/boissons' exact>
                 <Boissons />
               </Route>
-              <Route path='/snacks'>
+              <Route path='/snacks' exact>
                 <Snacks />
               </Route>
-              <Route path='/salades'>
+              <Route path='/salades' exact>
                 <Salades />
               </Route>
-              <Route path='/desserts'>
+              <Route path='/desserts' exact>
                 <Desserts />
               </Route>
 
               <Route path='/admin' exact>
                 <Admin />
               </Route>
-              <Route path='/admin/ajouter'>
+              <Route path='/admin/ajouter' exact>
                 <AjouterArticle categories={categories} />
               </Route>
-              <Route path='/admin/modifier/:slug'>
+              <Route path='/admin/modifier/:slug' exact>
                 <ModifierArticle categories={categories} />
               </Route>
-              <Route path='/admin/view/:slug'>
+              <Route path='/admin/view/:slug' exact>
                 <ViewArticle />
+              </Route>
+              <Route>
+                <NotFound />
               </Route>
             </Switch>
           </div>

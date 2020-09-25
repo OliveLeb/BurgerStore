@@ -10,7 +10,7 @@ const Snacks = ({ state }) => {
     <div className='site'>
       <div className='row'>
         {hasError ? (
-          <span>
+          <span className='error'>
             OOPSIE, une erreur est survenue lors de la récupération des données
             !
           </span>

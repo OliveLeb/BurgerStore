@@ -30,6 +30,13 @@ const Home = () => {
           modification et la suppressions des données de la bdd MySQL.
         </p>
       </div>
+
+      <div>
+        <p>
+          Une sauvegarde de la base de donnée existe, sentez vous libre
+          d'essayer les différentes fonctionnalités de l'onglet admin.
+        </p>
+      </div>
     </div>
   );
 };

@@ -27,3 +27,8 @@ export const updateImageInput = (dispatch, inputImage) => {
       image: inputImage.current.files[0].name,
     });
 };
+
+export const checkFileSize = (inputImage) => {
+  if (inputImage.current.files[0].size > 20000000) {
+  }
+};

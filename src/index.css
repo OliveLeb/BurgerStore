@@ -121,6 +121,10 @@ body {
   background: #c13c0d;
 }
 
+.error {
+  color: #fff;
+}
+
 /********* FOOTER **********/
 footer {
   position: absolute;
